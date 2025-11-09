@@ -3,136 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoFund: The Financial Mirror</title>
-    <!-- Load Tailwind CSS -->
+    <title>EchoFund: Meet Your Future Self</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use Inter font family -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        * {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f9fb; /* Light background */
         }
-        .card {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
         }
-        .impact-A, .impact-B {
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5), 0 0 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .tab-button {
             transition: all 0.3s ease;
-            cursor: pointer;
         }
-        .impact-B:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.5), 0 4px 6px -4px rgba(34, 197, 94, 0.5);
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
         }
-        .impact-A:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.5), 0 4px 6px -4px rgba(239, 68, 68, 0.5);
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
         }
-        /* Custom scrollbar for better look */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
-        ::-webkit-scrollbar-track { background: #e0e7ff; }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
-
-    <!-- Main Container -->
-    <div class="max-w-4xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 flex items-center justify-center">
-                <span class="mr-3 text-indigo-600">💡</span> EchoFund
-            </h1>
-            <p class="text-xl text-gray-600 mt-1">The Financial Mirror & Behavioral Nudge</p>
+    <div class="max-w-7xl mx-auto">
+        <!-- Header with Gradient -->
+        <header class="text-center mb-8 slide-in">
+            <div class="glass-card p-6 neon-glow">
+                <h1 class="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-2">
+                    💡 EchoFund
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 font-semibold">Meet Your Future Self — and Outperform Them</p>
+                <p class="text-sm text-gray-600 mt-2">The AI-Powered Behavioral Finance Mirror</p>
+            </div>
         </header>
 
-        <!-- User Status & Gamification -->
-        <div id="user-status" class="card bg-white p-4 mb-8 border-l-4 border-indigo-500 flex justify-between items-center transition duration-300">
-            <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                </svg>
-                <span class="text-gray-700 font-semibold">User ID: <span id="user-id" class="font-mono text-sm text-indigo-500">Loading...</span></span>
-            </div>
-            <div class="text-right">
-                <p class="text-sm text-gray-500">Level: <span id="user-level" class="font-bold text-lg text-indigo-600">1</span></p>
-                <p class="text-sm text-gray-500">Score: <span id="user-score" class="font-bold text-lg text-indigo-600">0</span></p>
+        <!-- User Status Card with Gamification -->
+        <div id="user-status" class="glass-card p-6 mb-6 slide-in">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl">
+                        <span id="user-level">1</span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">User ID</p>
+                        <p class="font-mono text-sm font-bold text-indigo-600" id="user-id">Loading...</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="text-center">
+                        <p class="text-xs text-gray-600 mb-1">Score</p>
+                        <p class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent" id="user-score">0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-600 mb-1">Next Level</p>
+                        <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div id="level-progress" class="h-full bg-gradient-to-r from-purple-500 to-pink-500 progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Input Section -->
-        <div id="input-section" class="card bg-white p-6 mb-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">What Financial Decision Are You Facing?</h2>
-            <textarea id="decision-input" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-none" placeholder="e.g., 'I have $500 extra this month. Should I spend it on a new jacket or add it to my emergency fund?'"></textarea>
-            <button onclick="analyzeDecision()" id="analyze-button" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50">
-                <span id="button-text">Project Alternate Futures (Ask EchoFund)</span>
-                <span id="loading-spinner" class="hidden h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></span>
+        <!-- Tab Navigation -->
+        <div class="flex space-x-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="switchTab('decision', this)" class="tab-button active px-6 py-3 rounded-lg font-semibold bg-white text-gray-700 hover:bg-gray-100">
+                🎯 Decision Analysis
+            </button>
+            <button onclick="switchTab('transactions', this)" class="tab-button px-6 py-3 rounded-lg font-semibold bg-white text-gray-700 hover:bg-gray-100">
+                💰 Transactions
+            </button>
+            <button onclick="switchTab('behavior', this)" class="tab-button px-6 py-3 rounded-lg font-semibold bg-white text-gray-700 hover:bg-gray-100">
+                🧠 Behavioral Profile
+            </button>
+            <button onclick="switchTab('simulator', this)" class="tab-button px-6 py-3 rounded-lg font-semibold bg-white text-gray-700 hover:bg-gray-100">
+                ⏰ Future Echo Simulator
+            </button>
+            <button onclick="switchTab('dashboard', this)" class="tab-button px-6 py-3 rounded-lg font-semibold bg-white text-gray-700 hover:bg-gray-100">
+                📊 Financial Mirror
             </button>
         </div>
 
-        <!-- Feedback & Message Display -->
-        <div id="message-box" class="hidden p-4 rounded-lg mb-8 text-center" role="alert"></div>
+        <!-- Message Box -->
+        <div id="message-box" class="hidden glass-card p-4 mb-6 text-center slide-in" role="alert"></div>
 
-        <!-- Results Section -->
-        <div id="results-section" class="hidden">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">The Financial Mirror: Your Alternate Futures</h2>
-            <div class="flex flex-col md:flex-row gap-6">
+        <!-- Tab Content: Decision Analysis -->
+        <div id="tab-decision" class="tab-content">
+            <div class="glass-card p-6 mb-6 slide-in">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+                    <span class="mr-3">🎯</span>
+                    What Financial Decision Are You Facing?
+                </h2>
+                <textarea id="decision-input" rows="4" class="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-500 focus:border-purple-500 transition duration-150 resize-none" placeholder="e.g., 'I have $500 extra this month. Should I spend it on a new jacket or add it to my emergency fund?'"></textarea>
+                <button onclick="analyzeDecision()" id="analyze-button" class="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 shadow-lg">
+                    <span id="button-text">✨ Project Alternate Futures</span>
+                    <span id="loading-spinner" class="hidden inline-block h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></span>
+                </button>
+            </div>
 
-                <!-- Scenario A: The Immediate Decision (Often Negative) -->
-                <div id="scenario-a-card" class="impact-A flex-1 card bg-red-50 p-6 border-l-4 border-red-500">
-                    <h3 class="text-xl font-bold text-red-600 mb-2 flex items-center">
-                        <span class="mr-2">🛑</span>
-                        <span id="scenario-a-title">Decision Scenario</span>
-                    </h3>
-                    <p id="scenario-a-outcome" class="text-gray-700 mb-4"></p>
-                    <div class="flex justify-between items-center text-red-700 font-semibold">
-                        <span>Impact Score:</span>
-                        <span id="scenario-a-score" class="text-3xl">0</span>
+            <!-- Results Section -->
+            <div id="results-section" class="hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">The Financial Mirror: Your Alternate Futures</h2>
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div id="scenario-a-card" class="glass-card p-6 border-l-4 border-red-500 hover:shadow-xl transition duration-300">
+                        <h3 class="text-2xl font-bold text-red-600 mb-3 flex items-center">
+                            <span class="mr-2">🛑</span>
+                            <span id="scenario-a-title">Decision Scenario</span>
+                        </h3>
+                        <p id="scenario-a-outcome" class="text-gray-700 mb-4 leading-relaxed"></p>
+                        <div class="flex justify-between items-center bg-red-50 p-4 rounded-lg">
+                            <span class="text-red-700 font-semibold">Impact Score:</span>
+                            <span id="scenario-a-score" class="text-4xl font-bold text-red-600">0</span>
+                        </div>
+                    </div>
+
+                    <div id="scenario-b-card" class="glass-card p-6 border-l-4 border-green-500 hover:shadow-xl transition duration-300">
+                        <h3 class="text-2xl font-bold text-green-600 mb-3 flex items-center">
+                            <span class="mr-2">✅</span>
+                            <span id="scenario-b-title">EchoFund Nudge</span>
+                        </h3>
+                        <p id="scenario-b-outcome" class="text-gray-700 mb-4 leading-relaxed"></p>
+                        <div class="flex justify-between items-center bg-green-50 p-4 rounded-lg">
+                            <span class="text-green-700 font-semibold">Impact Score:</span>
+                            <span id="scenario-b-score" class="text-4xl font-bold text-green-600">0</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Scenario B: The Recommended Nudge (Often Positive) -->
-                <div id="scenario-b-card" class="impact-B flex-1 card bg-green-50 p-6 border-l-4 border-green-500">
-                    <h3 class="text-xl font-bold text-green-600 mb-2 flex items-center">
-                        <span class="mr-2">✅</span>
-                        <span id="scenario-b-title">EchoFund Nudge</span>
-                    </h3>
-                    <p id="scenario-b-outcome" class="text-gray-700 mb-4"></p>
-                    <div class="flex justify-between items-center text-green-700 font-semibold">
-                        <span>Impact Score:</span>
-                        <span id="scenario-b-score" class="text-3xl">0</span>
+                <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-3">💡 EchoFund Insight</h3>
+                    <p id="ai-insight" class="text-gray-700 mb-6 italic text-lg"></p>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Which Future Will You Choose?</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <button onclick="commitChoice('A')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
+                            Commit to <span id="commit-a-text">Decision</span>
+                        </button>
+                        <button onclick="commitChoice('B')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl transition duration-200 transform hover:scale-105 shadow-lg">
+                            Commit to <span id="commit-b-text">Nudge</span>
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Insight and Choice -->
-            <div class="mt-8 card bg-blue-50 p-6 border-l-4 border-blue-500">
-                <h3 class="text-xl font-bold text-blue-700 mb-2">EchoFund Insight</h3>
-                <p id="ai-insight" class="text-gray-700 mb-4 italic"></p>
-
-                <h3 class="text-xl font-bold text-gray-800 mt-6 mb-3">Which Future Will You Choose?</h3>
-                <div class="flex gap-4">
-                    <button onclick="commitChoice('A')" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg transition duration-200">
-                        Commit to <span id="commit-a-text">Decision</span>
-                    </button>
-                    <button onclick="commitChoice('B')" class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg transition duration-200">
-                        Commit to <span id="commit-b-text">Nudge</span>
-                    </button>
+        <!-- Tab Content: Transactions -->
+        <div id="tab-transactions" class="tab-content hidden">
+            <div class="glass-card p-6 mb-6 slide-in">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">💰 Add Transaction</h2>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <input type="text" id="txn-description" placeholder="Description (e.g., Starbucks Coffee)" class="p-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-500 focus:border-purple-500">
+                    <input type="number" id="txn-amount" placeholder="Amount ($)" step="0.01" class="p-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-500 focus:border-purple-500">
                 </div>
+                <input type="text" id="txn-emotion" placeholder="Emotional context (optional, e.g., 'stressful day', 'impulse buy')" class="w-full p-3 border-2 border-gray-300 rounded-lg mb-4 focus:ring-4 focus:ring-purple-500 focus:border-purple-500">
+                <button onclick="addTransaction()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-xl transition duration-300 transform hover:scale-[1.02] shadow-lg">
+                    ➕ Add Transaction
+                </button>
+            </div>
+
+            <div class="glass-card p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">📋 Recent Transactions</h2>
+                <div id="transactions-list" class="space-y-3">
+                    <p class="text-gray-500 text-center py-8">No transactions yet. Add your first transaction above!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Behavioral Profile -->
+        <div id="tab-behavior" class="tab-content hidden">
+            <div class="glass-card p-6 mb-6 slide-in">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">🧠 Your Behavioral Finance Profile</h2>
+                <div id="behavioral-profile" class="space-y-4">
+                    <p class="text-gray-500 text-center py-8">Add transactions to see your behavioral profile!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Future Echo Simulator -->
+        <div id="tab-simulator" class="tab-content hidden">
+            <div class="glass-card p-6 mb-6 slide-in">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">⏰ Future Echo Simulator</h2>
+                <p class="text-gray-600 mb-6">See how small changes today impact your future self!</p>
+                
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Target Category</label>
+                        <select id="sim-category" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-500 focus:border-purple-500">
+                            <option value="Impulse/Coffee">Impulse/Coffee</option>
+                            <option value="Food/Dining">Food/Dining</option>
+                            <option value="Impulse/Shopping">Impulse/Shopping</option>
+                            <option value="Transportation">Transportation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Reduction Amount ($)</label>
+                        <input type="number" id="sim-reduction" step="0.01" value="5.00" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-purple-500 focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Time Period: <span id="sim-months-display">12</span> months</label>
+                        <input type="range" id="sim-months" min="1" max="60" value="12" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer" oninput="updateSimulatorMonths()">
+                        <div class="flex justify-between text-xs text-gray-500 mt-1">
+                            <span>1 month</span>
+                            <span>60 months</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="runSimulation()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-[1.02] shadow-lg mb-6">
+                    🚀 Simulate Future Echo
+                </button>
+
+                <div id="simulation-results" class="hidden">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="glass-card p-6 bg-red-50 border-l-4 border-red-500">
+                            <h3 class="text-xl font-bold text-red-600 mb-2">Current Path</h3>
+                            <p class="text-4xl font-bold text-red-600" id="current-path">$0</p>
+                        </div>
+                        <div class="glass-card p-6 bg-green-50 border-l-4 border-green-500">
+                            <h3 class="text-xl font-bold text-green-600 mb-2">Optimized Path</h3>
+                            <p class="text-4xl font-bold text-green-600" id="optimized-path">$0</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-purple-50">
+                        <h3 class="text-2xl font-bold text-blue-700 mb-3">💰 Potential Savings</h3>
+                        <p class="text-5xl font-bold text-blue-600 mb-4" id="savings-amount">$0</p>
+                        <p id="simulation-message" class="text-gray-700 text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Dashboard -->
+        <div id="tab-dashboard" class="tab-content hidden">
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="glass-card p-6 slide-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 Spending Summary</h2>
+                    <div id="spending-summary" class="space-y-3">
+                        <p class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div class="glass-card p-6 slide-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">📈 Category Breakdown</h2>
+                    <canvas id="category-chart" height="200"></canvas>
+                </div>
+            </div>
+            <div class="glass-card p-6 slide-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🔄 Current vs Optimized Path</h2>
+                <canvas id="path-comparison-chart" height="100"></canvas>
             </div>
         </div>
     </div>
 
     <!-- Firebase and Application Logic -->
     <script type="module">
-        // Mandatory Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Variables (Provided by Canvas Environment)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-echofund-id';
         const firebaseConfig = {
             apiKey: "AIzaSyA0VTSNG9l6SVVtCZjjc8cttqBKbwXyWJA",
@@ -144,47 +343,27 @@
             measurementId: "G-PZK5Y8XR8Y"
         };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        const apiKey = "AIzaSyAcnWSzOjJd2nVXMxy7AQ-Aq3GnvUljgpo"; // API key for Gemini
+        const apiKey = "AIzaSyAcnWSzOjJd2nVXMxy7AQ-Aq3GnvUljgpo";
+        const BACKEND_URL = "http://localhost:8000";
 
-        // Firebase Services
-        let app;
-        let db;
-        let auth;
-        let currentUserId = null;
-        let isAuthReady = false;
-
-        // User Game State
-        let userScore = 0;
-        let userLevel = 1;
-        const LEVEL_THRESHOLDS = [0, 50, 150, 300]; // Score needed for Level 1, 2, 3, 4...
-
-        // Current Scenario Data (to be used when committing choice)
+        let app, db, auth, currentUserId = null, isAuthReady = false;
+        let userScore = 0, userLevel = 1;
+        const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 750, 1000];
         let currentScenarios = {};
-
-        // === Utility Functions ===
+        let categoryChart = null, pathChart = null;
 
         function showMessage(type, content) {
             const box = document.getElementById('message-box');
             box.textContent = content;
-            box.className = 'p-4 rounded-lg mb-8 text-center';
-            box.classList.add('block');
+            box.className = 'glass-card p-4 mb-6 text-center slide-in';
+            box.classList.remove('hidden');
             switch (type) {
-                case 'success':
-                    box.classList.add('bg-green-100', 'text-green-800');
-                    break;
-                case 'error':
-                    box.classList.add('bg-red-100', 'text-red-800');
-                    break;
-                case 'info':
-                    box.classList.add('bg-blue-100', 'text-blue-800');
-                    break;
-                default:
-                    box.classList.add('bg-gray-100', 'text-gray-800');
+                case 'success': box.classList.add('bg-green-100', 'text-green-800'); break;
+                case 'error': box.classList.add('bg-red-100', 'text-red-800'); break;
+                case 'info': box.classList.add('bg-blue-100', 'text-blue-800'); break;
+                default: box.classList.add('bg-gray-100', 'text-gray-800');
             }
-            setTimeout(() => {
-                box.classList.remove('block');
-                box.classList.add('hidden');
-            }, 5000);
+            setTimeout(() => box.classList.add('hidden'), 5000);
         }
 
         function toggleLoading(isLoading) {
@@ -196,62 +375,54 @@
                 buttonText.textContent = 'Projecting Futures...';
                 spinner.classList.remove('hidden');
             } else {
-                buttonText.textContent = 'Project Alternate Futures (Ask EchoFund)';
+                buttonText.textContent = '✨ Project Alternate Futures';
                 spinner.classList.add('hidden');
             }
         }
 
         function calculateLevel(score) {
             for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
-                if (score >= LEVEL_THRESHOLDS[i]) {
-                    return i + 1;
-                }
+                if (score >= LEVEL_THRESHOLDS[i]) return i + 1;
             }
             return 1;
         }
 
         function updateUI() {
-            document.getElementById('user-id').textContent = currentUserId || 'N/A';
+            document.getElementById('user-id').textContent = currentUserId ? currentUserId.substring(0, 8) + '...' : 'N/A';
             document.getElementById('user-score').textContent = userScore;
             document.getElementById('user-level').textContent = userLevel;
-            document.getElementById('results-section').classList.add('hidden');
+            
+            const currentLevelThreshold = LEVEL_THRESHOLDS[userLevel - 1] || 0;
+            const nextLevelThreshold = LEVEL_THRESHOLDS[userLevel] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1];
+            const progress = ((userScore - currentLevelThreshold) / (nextLevelThreshold - currentLevelThreshold)) * 100;
+            document.getElementById('level-progress').style.width = Math.max(0, Math.min(100, progress)) + '%';
         }
-
-        // === Firebase Initialization and State Handling ===
 
         async function initFirebase() {
             try {
-                // setLogLevel('debug'); // Uncomment for debugging
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
-
                 await setPersistence(auth, browserLocalPersistence);
-
                 if (initialAuthToken) {
                     await signInWithCustomToken(auth, initialAuthToken);
                 } else {
                     await signInAnonymously(auth);
                 }
-
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         currentUserId = user.uid;
                         isAuthReady = true;
-                        document.getElementById('user-id').textContent = currentUserId.substring(0, 8) + '...';
                         subscribeToGameState();
                     } else {
                         currentUserId = crypto.randomUUID();
                         isAuthReady = true;
-                        document.getElementById('user-id').textContent = currentUserId.substring(0, 8) + ' (Anon)';
                         updateUI();
-                        showMessage('info', 'Signed in anonymously. Progress will be saved locally if auth token is unavailable.');
                     }
                 });
             } catch (error) {
-                console.error("Firebase Initialization Error:", error);
-                showMessage('error', `Firebase setup failed: ${error.message}`);
-                currentUserId = crypto.randomUUID(); // Fallback for anon user
+                console.error("Firebase Error:", error);
+                currentUserId = crypto.randomUUID();
                 isAuthReady = true;
                 updateUI();
             }
@@ -259,200 +430,121 @@
 
         function getGameStateRef() {
             if (!currentUserId) return null;
-            // Private data storage path: /artifacts/{appId}/users/{userId}/{collectionName}/{documentId}
             return doc(db, 'artifacts', appId, 'users', currentUserId, 'echofund_data', 'state');
         }
 
         function subscribeToGameState() {
             const docRef = getGameStateRef();
             if (!docRef) return;
-
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     userScore = data.score || 0;
                     userLevel = calculateLevel(userScore);
                     updateUI();
-                    showMessage('success', 'Game state loaded from the Financial Cloud.');
                 } else {
-                    // Initialize state if it doesn't exist
                     userScore = 0;
                     userLevel = 1;
                     updateUI();
                     setDoc(docRef, { score: 0, created: new Date().toISOString() });
-                    showMessage('info', 'New EchoFund profile created.');
                 }
-            }, (error) => {
-                console.error("Firestore subscription error:", error);
-                showMessage('error', `Error loading state: ${error.message}`);
             });
         }
 
         async function updateScore(points) {
-            if (!isAuthReady || !currentUserId) {
-                showMessage('error', 'Authentication not ready. Cannot save progress.');
-                return;
-            }
-
+            if (!isAuthReady || !currentUserId) return;
             const docRef = getGameStateRef();
             if (!docRef) return;
-
             userScore += points;
             const newLevel = calculateLevel(userScore);
             const levelUp = newLevel > userLevel;
             userLevel = newLevel;
-
             try {
                 await setDoc(docRef, { score: userScore, updated: new Date().toISOString() }, { merge: true });
                 updateUI();
                 if (levelUp) {
-                    showMessage('success', `Level Up! You are now Level ${userLevel}!`);
-                } else {
-                    showMessage('success', `Score increased by ${points}. Current Score: ${userScore}`);
+                    showMessage('success', `🎉 Level Up! You are now Level ${userLevel}!`);
                 }
             } catch (e) {
-                console.error("Error updating document: ", e);
-                showMessage('error', 'Error saving score. Please check console.');
+                console.error("Error updating score:", e);
             }
         }
 
-        // === Gemini API Logic ===
-
-        /**
-         * Calls the Gemini API to get a structured analysis of the user's financial decision.
-         */
         async function callGeminiApi(decision) {
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-            const systemPrompt = `You are EchoFund, an expert behavioral finance AI. Your role is to analyze a user's financial decision and provide two highly distinct alternate futures (scenarios A and B).
-            Scenario A must reflect the outcome of the user's immediate decision.
-            Scenario B must reflect a financially wiser, nudged alternative (e.g., saving, investing, or delaying a purchase).
-            Each scenario must include a detailed narrative (outcome) and a numerical Impact Score (from -100 to +100) reflecting the long-term financial health impact. Negative scores are bad, positive are good.
-            Finally, provide a single 'insight' summarizing the comparison.`;
-
+            const systemPrompt = `You are EchoFund, an expert behavioral finance AI. Analyze the user's financial decision and provide two distinct alternate futures (scenarios A and B). Scenario A reflects the immediate decision outcome. Scenario B reflects a financially wiser alternative. Each scenario must include a detailed narrative and an Impact Score (-100 to +100). Provide a single insight summarizing the comparison.`;
             const userQuery = `My current financial decision is: "${decision}". Analyze this and project two alternate futures (Scenario A: Immediate Action, Scenario B: EchoFund Nudge).`;
-
             const responseSchema = {
                 type: "OBJECT",
                 properties: {
                     scenarioA: {
                         type: "OBJECT",
-                        description: "The outcome of the user's initial decision.",
                         properties: {
-                            title: { "type": "STRING", "description": "A short title for the scenario (e.g., 'The Immediate Purchase')." },
-                            outcome: { "type": "STRING", "description": "A detailed, behavioral-focused narrative of the financial future." },
-                            impactScore: { "type": "INTEGER", "description": "The financial impact score (-100 to +100)." }
+                            title: { type: "STRING" },
+                            outcome: { type: "STRING" },
+                            impactScore: { type: "INTEGER" }
                         },
                         required: ["title", "outcome", "impactScore"]
                     },
                     scenarioB: {
                         type: "OBJECT",
-                        description: "The outcome of the financially nudged decision.",
                         properties: {
-                            title: { "type": "STRING", "description": "A short title for the nudge (e.g., 'The Smart Investment')." },
-                            outcome: { "type": "STRING", "description": "A detailed, behavioral-focused narrative of the financial future." },
-                            impactScore: { "type": "INTEGER", "description": "The financial impact score (-100 to +100)." }
+                            title: { type: "STRING" },
+                            outcome: { type: "STRING" },
+                            impactScore: { type: "INTEGER" }
                         },
                         required: ["title", "outcome", "impactScore"]
                     },
-                    insight: { "type": "STRING", "description": "A concise summary comparing the two scenarios." }
+                    insight: { type: "STRING" }
                 },
                 required: ["scenarioA", "scenarioB", "insight"]
             };
-
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: responseSchema
-                },
-            };
-
-            let attempts = 0;
-            const maxAttempts = 3;
-
-            while (attempts < maxAttempts) {
-                attempts++;
-                const delay = Math.pow(2, attempts - 1) * 1000; // Exponential backoff (1s, 2s, 4s)
-
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.status === 429 && attempts < maxAttempts) {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        continue;
-                    }
-
-                    if (!response.ok) {
-                        throw new Error(`API returned status ${response.status}: ${response.statusText}`);
-                    }
-
-                    const result = await response.json();
-                    const jsonString = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (!jsonString) {
-                        throw new Error("Gemini API returned no content.");
-                    }
-
-                    // Remove markdown backticks if the model wraps the JSON string
-                    const cleanJsonString = jsonString.replace(/```json\n|```/g, '').trim();
-
-                    return JSON.parse(cleanJsonString);
-
-                } catch (error) {
-                    console.error(`Attempt ${attempts} failed:`, error);
-                    if (attempts === maxAttempts) {
-                        throw new Error(`Failed to process request after ${maxAttempts} attempts.`);
-                    }
-                    await new Promise(resolve => setTimeout(resolve, delay));
                 }
-            }
+            };
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error(`API returned status ${response.status}`);
+            const result = await response.json();
+            const jsonString = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!jsonString) throw new Error("No content returned");
+            const cleanJsonString = jsonString.replace(/```json\n|```/g, '').trim();
+            return JSON.parse(cleanJsonString);
         }
-
-        // === Main Application Functions ===
 
         window.analyzeDecision = async function() {
             const decisionInput = document.getElementById('decision-input').value.trim();
             document.getElementById('results-section').classList.add('hidden');
-            document.getElementById('message-box').classList.add('hidden');
-
             if (!decisionInput) {
                 showMessage('error', 'Please describe your financial decision first!');
                 return;
             }
-
             toggleLoading(true);
-
             try {
                 const analysis = await callGeminiApi(decisionInput);
                 currentScenarios = analysis;
-
-                // Update Scenario A
                 document.getElementById('scenario-a-title').textContent = analysis.scenarioA.title;
                 document.getElementById('scenario-a-outcome').textContent = analysis.scenarioA.outcome;
                 document.getElementById('scenario-a-score').textContent = analysis.scenarioA.impactScore;
                 document.getElementById('commit-a-text').textContent = analysis.scenarioA.title;
-
-                // Update Scenario B (Nudge)
                 document.getElementById('scenario-b-title').textContent = analysis.scenarioB.title;
                 document.getElementById('scenario-b-outcome').textContent = analysis.scenarioB.outcome;
                 document.getElementById('scenario-b-score').textContent = analysis.scenarioB.impactScore;
                 document.getElementById('commit-b-text').textContent = analysis.scenarioB.title;
-
-                // Update Insight
                 document.getElementById('ai-insight').textContent = analysis.insight;
-
                 document.getElementById('results-section').classList.remove('hidden');
-                showMessage('info', 'EchoFund has successfully projected your alternate futures! Now, make your choice.');
-
+                showMessage('info', '✨ EchoFund has projected your alternate futures!');
             } catch (error) {
                 console.error("Analysis Error:", error);
-                showMessage('error', `Analysis failed. Check the console for details. (Error: ${error.message})`);
+                showMessage('error', `Analysis failed: ${error.message}`);
             } finally {
                 toggleLoading(false);
             }
@@ -460,39 +552,192 @@
 
         window.commitChoice = function(choice) {
             if (!currentScenarios || (!currentScenarios.scenarioA && !currentScenarios.scenarioB)) {
-                showMessage('error', 'Please run a projection before committing a choice.');
+                showMessage('error', 'Please run a projection first.');
                 return;
             }
-
-            let scoreEarned = 0;
-            let choiceText = "";
-            let impactScore = 0;
-
-            if (choice === 'A') {
-                impactScore = currentScenarios.scenarioA.impactScore;
-                choiceText = currentScenarios.scenarioA.title;
-            } else {
-                impactScore = currentScenarios.scenarioB.impactScore;
-                choiceText = currentScenarios.scenarioB.title;
-            }
-
-            // Gamification Logic: Score earned is 1 point for every 5 points of Impact Score
-            scoreEarned = Math.max(0, Math.floor(impactScore / 5));
-
+            const impactScore = choice === 'A' ? currentScenarios.scenarioA.impactScore : currentScenarios.scenarioB.impactScore;
+            const choiceText = choice === 'A' ? currentScenarios.scenarioA.title : currentScenarios.scenarioB.title;
+            const scoreEarned = Math.max(0, Math.floor(impactScore / 5));
             if (scoreEarned > 0) {
                 updateScore(scoreEarned);
-                showMessage('success', `You committed to the ${choiceText} choice, earning ${scoreEarned} score points! Keep growing your financial mirror.`);
-            } else {
-                showMessage('info', `You committed to the ${choiceText} choice. While the Impact Score was low, every choice is a learning experience.`);
+                showMessage('success', `You committed to ${choiceText}, earning ${scoreEarned} points!`);
             }
-
-            // Reset UI for next decision
             document.getElementById('decision-input').value = '';
             document.getElementById('results-section').classList.add('hidden');
         }
 
-        // Initialize everything when the window loads
-        window.onload = initFirebase;
+        window.switchTab = function(tabName, buttonElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            if (buttonElement) buttonElement.classList.add('active');
+            if (tabName === 'dashboard') loadDashboard();
+            if (tabName === 'behavior') loadBehavioralProfile();
+            if (tabName === 'transactions') loadTransactions();
+        }
+
+        window.addTransaction = async function() {
+            const description = document.getElementById('txn-description').value.trim();
+            const amount = parseFloat(document.getElementById('txn-amount').value);
+            const emotion = document.getElementById('txn-emotion').value.trim();
+            if (!description || !amount || amount <= 0) {
+                showMessage('error', 'Please fill in description and amount!');
+                return;
+            }
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/transactions/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description, amount, emotional_context: emotion || null })
+                });
+                if (!response.ok) throw new Error('Failed to add transaction');
+                const data = await response.json();
+                showMessage('success', 'Transaction added successfully!');
+                document.getElementById('txn-description').value = '';
+                document.getElementById('txn-amount').value = '';
+                document.getElementById('txn-emotion').value = '';
+                loadTransactions();
+                loadBehavioralProfile();
+            } catch (error) {
+                console.error("Error:", error);
+                showMessage('error', 'Failed to add transaction. Is the backend running?');
+            }
+        }
+
+        async function loadTransactions() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/transactions/`);
+                const transactions = await response.json();
+                const listEl = document.getElementById('transactions-list');
+                if (transactions.length === 0) {
+                    listEl.innerHTML = '<p class="text-gray-500 text-center py-8">No transactions yet.</p>';
+                    return;
+                }
+                listEl.innerHTML = transactions.map(t => `
+                    <div class="glass-card p-4 flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold text-gray-800">${t.description}</p>
+                            <p class="text-sm text-gray-600">${t.category} ${t.emotional_context ? '• ' + t.emotional_context : ''}</p>
+                        </div>
+                        <p class="text-xl font-bold text-red-600">$${t.amount.toFixed(2)}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                document.getElementById('transactions-list').innerHTML = '<p class="text-red-500 text-center py-8">Error loading transactions. Is the backend running?</p>';
+            }
+        }
+
+        async function loadBehavioralProfile() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/behavioral-profile/`);
+                const profile = await response.json();
+                const profileEl = document.getElementById('behavioral-profile');
+                const scores = [
+                    { name: 'Impulsive', value: profile.impulsive_score, color: '#ef4444' },
+                    { name: 'Disciplined', value: profile.disciplined_score, color: '#22c55e' },
+                    { name: 'Risk-Seeking', value: profile.risk_seeking_score, color: '#f97316' },
+                    { name: 'Cautious', value: profile.cautious_score, color: '#3b82f6' },
+                    { name: 'Saver', value: profile.saver_score, color: '#a855f7' },
+                    { name: 'Spender', value: profile.spender_score, color: '#ec4899' }
+                ];
+                profileEl.innerHTML = scores.map(s => {
+                    const percentage = (s.value * 100).toFixed(0);
+                    return `
+                    <div class="mb-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-semibold text-gray-700">${s.name}</span>
+                            <span class="font-bold" style="color: ${s.color}">${percentage}%</span>
+                        </div>
+                        <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full progress-bar" style="width: ${s.value * 100}%; background: linear-gradient(to right, ${s.color}, ${s.color}dd);"></div>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+            } catch (error) {
+                document.getElementById('behavioral-profile').innerHTML = '<p class="text-red-500 text-center py-8">Error loading profile. Is the backend running?</p>';
+            }
+        }
+
+        window.updateSimulatorMonths = function() {
+            document.getElementById('sim-months-display').textContent = document.getElementById('sim-months').value;
+        }
+
+        window.runSimulation = async function() {
+            const category = document.getElementById('sim-category').value;
+            const reduction = parseFloat(document.getElementById('sim-reduction').value);
+            const months = parseInt(document.getElementById('sim-months').value);
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/simulate/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target_category: category, reduction_amount: reduction, months_to_simulate: months })
+                });
+                const data = await response.json();
+                document.getElementById('current-path').textContent = '$' + data.current_path.toFixed(2);
+                document.getElementById('optimized-path').textContent = '$' + data.optimized_path.toFixed(2);
+                document.getElementById('savings-amount').textContent = '$' + data.savings.toFixed(2);
+                document.getElementById('simulation-message').textContent = data.message;
+                document.getElementById('simulation-results').classList.remove('hidden');
+                showMessage('success', 'Simulation completed!');
+            } catch (error) {
+                showMessage('error', 'Simulation failed. Is the backend running?');
+            }
+        }
+
+        async function loadDashboard() {
+            try {
+                const [summaryRes, profileRes] = await Promise.all([
+                    fetch(`${BACKEND_URL}/api/summary/`),
+                    fetch(`${BACKEND_URL}/api/behavioral-profile/`)
+                ]);
+                const summary = await summaryRes.json();
+                const profile = await profileRes.json();
+                
+                document.getElementById('spending-summary').innerHTML = `
+                    <div class="text-4xl font-bold text-gray-800 mb-2">$${summary.total_spending.toFixed(2)}</div>
+                    <p class="text-gray-600 mb-4">Total Spending</p>
+                    <p class="text-sm text-gray-500">${summary.transaction_count} transactions</p>
+                `;
+                
+                if (categoryChart) categoryChart.destroy();
+                const ctx = document.getElementById('category-chart').getContext('2d');
+                categoryChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(summary.categories),
+                        datasets: [{
+                            data: Object.values(summary.categories),
+                            backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+                
+                if (pathChart) pathChart.destroy();
+                const pathCtx = document.getElementById('path-comparison-chart').getContext('2d');
+                pathChart = new Chart(pathCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Current Path', 'Optimized Path'],
+                        datasets: [{
+                            label: 'Spending',
+                            data: [summary.total_spending, summary.total_spending * 0.8],
+                            backgroundColor: ['#ef4444', '#22c55e']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: true }
+                });
+            } catch (error) {
+                console.error("Dashboard error:", error);
+            }
+        }
+
+        window.onload = function() {
+            initFirebase();
+            loadTransactions();
+        };
     </script>
 </body>
 </html>
+
