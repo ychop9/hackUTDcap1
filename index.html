@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EchoFund: Meet Your Future Self</title>
+    <title>FinReflect: Meet Your Future Self</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
@@ -104,7 +104,7 @@
         <header class="text-center mb-8 slide-in">
             <div class="glass-card p-6 neon-glow">
                 <h1 class="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                    💡 EchoFund
+                    💡 FinReflect
                 </h1>
                 <p class="text-xl md:text-2xl text-gray-700 font-semibold">Meet Your Future Self — and Outperform Them</p>
                 <p class="text-sm text-gray-600 mt-2">The AI-Powered Behavioral Finance Mirror</p>
@@ -193,7 +193,7 @@
                     <div id="scenario-b-card" class="glass-card p-6 border-l-4 border-green-500 hover:shadow-xl transition duration-300">
                         <h3 class="text-2xl font-bold text-green-600 mb-3 flex items-center">
                             <span class="mr-2">✅</span>
-                            <span id="scenario-b-title">EchoFund Nudge</span>
+                            <span id="scenario-b-title">FinReflect Nudge</span>
                         </h3>
                         <p id="scenario-b-outcome" class="text-gray-700 mb-4 leading-relaxed"></p>
                         <div class="flex justify-between items-center bg-green-50 p-4 rounded-lg">
@@ -204,7 +204,7 @@
                 </div>
 
                 <div class="glass-card p-6 bg-gradient-to-r from-blue-50 to-purple-50 border-l-4 border-blue-500">
-                    <h3 class="text-2xl font-bold text-blue-700 mb-3">💡 EchoFund Insight</h3>
+                    <h3 class="text-2xl font-bold text-blue-700 mb-3">💡 FinReflect Insight</h3>
                     <p id="ai-insight" class="text-gray-700 mb-6 italic text-lg"></p>
                     <h3 class="text-xl font-bold text-gray-800 mb-4">Which Future Will You Choose?</h3>
                     <div class="grid md:grid-cols-2 gap-4">
@@ -326,27 +326,59 @@
         </div>
     </div>
 
+    <!-- Manual Transaction Log -->
+        <div id="manual-txn-section" class="mt-8 card bg-white p-6 border-l-4 border-yellow-500">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+                <span class="mr-2 text-yellow-600">📝</span> Manual Transaction Log
+            </h2>
+            <div class="space-y-3">
+                <input type="text" id="txn-description" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" placeholder="Transaction Description (e.g., Coffee, Gym Membership)">
+                <input type="number" id="txn-amount" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" placeholder="Amount (e.g., 4.50)" step="0.01">
+                <input type="text" id="txn-emotion" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500" placeholder="Emotional Context (e.g., Stressed, Happy, Guilt)">
+                <button onclick="addTransaction()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Log Transaction
+                </button>
+            </div>
+        </div>
+
     <!-- Firebase and Application Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-echofund-id';
-        const firebaseConfig = {
+        const LOCAL_FIREBASE_CONFIG = {
             apiKey: "AIzaSyA0VTSNG9l6SVVtCZjjc8cttqBKbwXyWJA",
             authDomain: "mirrorcap1hackutd25.firebaseapp.com",
             projectId: "mirrorcap1hackutd25",
             storageBucket: "mirrorcap1hackutd25.firebasestorage.app",
             messagingSenderId: "28560693807",
             appId: "1:28560693807:web:a212c632d9ef65d58f44da",
-            measurementId: "G-PZK5Y8XR8Y"
+            //measurementId: "G-PZK5Y8XR8Y"
         };
+
+        let firebaseConfig;
+        try {
+            // Attempt to use the environment config, fall back to local if environment variable is undefined
+            firebaseConfig = typeof __firebase_config !== 'undefined' 
+                ? JSON.parse(__firebase_config) 
+                : LOCAL_FIREBASE_CONFIG; 
+
+            // Critical check to ensure the config is not the placeholder
+            if (firebaseConfig.apiKey === "AIzaSyA0VTSNG9l6SVVtCZjjc8cttqBKbwXyWJA") {
+                console.warn("⚠️ WARNING: Using placeholder Firebase configuration. Score saving will fail.");
+            }
+        } catch (e) {
+            console.error("CRITICAL ERROR: Failed to parse Firebase configuration from environment variable.", e);
+            firebaseConfig = LOCAL_FIREBASE_CONFIG; // Fall back to local (which is likely also invalid)
+            showMessage('error', 'Critical: Firebase Config Parse Error. Check console!');
+        }
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
         const apiKey = "AIzaSyAcnWSzOjJd2nVXMxy7AQ-Aq3GnvUljgpo";
         const BACKEND_URL = "http://localhost:8000";
 
-        let app, db, auth, currentUserId = null, isAuthReady = false;
+        let app, db, auth, currentUserId = null, isAuthReady = true;
         let userScore = 0, userLevel = 1;
         const LEVEL_THRESHOLDS = [0, 50, 150, 300, 500, 750, 1000];
         let currentScenarios = {};
@@ -388,19 +420,30 @@
         }
 
         function updateUI() {
-            document.getElementById('user-id').textContent = currentUserId ? currentUserId.substring(0, 8) + '...' : 'N/A';
-            document.getElementById('user-score').textContent = userScore;
+            // Only show partial ID if it's a real Firebase user ID (length 28)
+            const displayId = currentUserId && currentUserId.length > 20 
+                ? currentUserId.substring(0, 8) + '...' 
+                : (currentUserId || 'N/A');
+
+            document.getElementById('user-id').textContent = displayId;
+            document.getElementById('user-score').textContent = userScore; // <-- This correctly updates the UI element
             document.getElementById('user-level').textContent = userLevel;
-            
-            const currentLevelThreshold = LEVEL_THRESHOLDS[userLevel - 1] || 0;
-            const nextLevelThreshold = LEVEL_THRESHOLDS[userLevel] || LEVEL_THRESHOLDS[LEVEL_THRESHOLDS.length - 1];
-            const progress = ((userScore - currentLevelThreshold) / (nextLevelThreshold - currentLevelThreshold)) * 100;
-            document.getElementById('level-progress').style.width = Math.max(0, Math.min(100, progress)) + '%';
+            document.getElementById('results-section').classList.add('hidden');
         }
 
         async function initFirebase() {
             try {
-                app = initializeApp(firebaseConfig);
+                setLogLevel('debug'); // Re-enabling for detailed debugging
+
+                if (isUsingPlaceholderConfig) {
+                    currentUserId = 'DUMMY-' + crypto.randomUUID().substring(0, 8);
+                    isAuthReady = true;
+                    updateUI();
+                    showMessage('error', 'Authentication skipped. Placeholder Firebase config is being used. Score saving is disabled.');
+                    return; // EXIT early, prevents the auth/configuration-not-found error
+                }
+
+                app = initializeApp(firebaseConfig); //check this as well
                 auth = getAuth(app);
                 db = getFirestore(app);
                 await setPersistence(auth, browserLocalPersistence);
@@ -413,11 +456,15 @@
                     if (user) {
                         currentUserId = user.uid;
                         isAuthReady = true;
+                        updateUI();
                         subscribeToGameState();
+                        showMessage('success', 'Connected to Firebase and signed in.');
                     } else {
+                        // This should only happen on sign-out if persistence fails
                         currentUserId = crypto.randomUUID();
                         isAuthReady = true;
                         updateUI();
+                        showMessage('info', 'Signed in anonymously. Progress is not saved.');
                     }
                 });
             } catch (error) {
@@ -452,28 +499,89 @@
         }
 
         async function updateScore(points) {
-            if (!isAuthReady || !currentUserId) return;
+            // Check 1: Is Auth complete?
+            if (!isAuthReady || !currentUserId) {
+                showMessage('error', 'Score not saved: Authentication is not ready or User ID is missing.');
+                console.error('UpdateScore Failed: Auth not ready or userId is null.', { isAuthReady, currentUserId });
+                return;
+            }
+
+            // Check 2: Is Firestore initialized?
+            if (!db) {
+                showMessage('error', 'Score not saved: Database connection failed during initialization.');
+                console.error('UpdateScore Failed: Firestore (db) instance is null.');
+                return;
+            }
+
             const docRef = getGameStateRef();
-            if (!docRef) return;
+            if (!docRef) {
+                showMessage('error', 'Score not saved: Could not determine document reference.');
+                console.error('UpdateScore Failed: Document Reference is null.');
+                return;
+            }
+
+            /* Update local state first for immediate UI refresh
             userScore += points;
             const newLevel = calculateLevel(userScore);
             const levelUp = newLevel > userLevel;
             userLevel = newLevel;
+
             try {
+                // Update Firestore
                 await setDoc(docRef, { score: userScore, updated: new Date().toISOString() }, { merge: true });
-                updateUI();
+                
+                // --- MESSAGING ONLY AFTER SUCCESSFUL DB WRITE ---
+                console.log(`[Firestore] Score Saved: ${userScore}`);
+
                 if (levelUp) {
-                    showMessage('success', `🎉 Level Up! You are now Level ${userLevel}!`);
+                    showMessage('success', `Level Up! You are now Level ${userLevel}!`);
+                } else if (points > 0) {
+                    // Success message with points earned AND current total score
+                    showMessage('success', `You committed to the ${choiceText} choice, earning ${points} score points! Current Score: ${userScore}`);
+                } else {
+                    // Message for low-impact/zero-score choices
+                    showMessage('info', `You committed to the ${choiceText} choice. While the Impact Score was low, every choice is a learning experience. Current Score: ${userScore}`);
                 }
+
+                // The onSnapshot listener will now fire and update the UI via updateUI()
+
             } catch (e) {
-                console.error("Error updating score:", e);
+                console.error("Error updating document: ", e);
+                showMessage('error', 'Error saving score. Check your browser console and network status.');
+            }*/
+           const newScore = userScore + points; 
+            const newLevel = calculateLevel(newScore);
+            const levelUp = newLevel > userLevel; // Use the OLD userLevel for this check
+
+            try {
+                // Update Firestore with the calculated NEW score. 
+                // The onSnapshot listener will then read this new score and update the UI.
+                await setDoc(docRef, { score: newScore, updated: new Date().toISOString() }, { merge: true });
+                
+                // --- MESSAGING ONLY AFTER SUCCESSFUL DB WRITE ---
+                console.log(`[Firestore] Write Success. New Score is ${newScore}. Awaiting onSnapshot callback.`);
+
+                if (levelUp) {
+                    showMessage('success', `Level Up! You are now Level ${newLevel}!`); // Use newLevel for message
+                } else if (points > 0) {
+                    // Success message with points earned AND the calculated total score
+                    showMessage('success', `You committed to the ${choiceText} choice, earning ${points} score points! Current Score: ${newScore}`);
+                } else {
+                    // Message for low-impact/zero-score choices
+                    showMessage('info', `You committed to the ${choiceText} choice. While the Impact Score was low, every choice is a learning experience. Current Score: ${newScore}`);
+                }
+
+            } catch (e) {
+                console.error("Error updating document:", e);
+                // CRITICAL ERROR MESSAGE FOR DEBUGGING
+                showMessage('error', `CRITICAL: Error saving score. Check your browser console (F12) for detailed Firebase debug logs! Error: ${e.message}`);
             }
         }
 
         async function callGeminiApi(decision) {
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const systemPrompt = `You are EchoFund, an expert behavioral finance AI. Analyze the user's financial decision and provide two distinct alternate futures (scenarios A and B). Scenario A reflects the immediate decision outcome. Scenario B reflects a financially wiser alternative. Each scenario must include a detailed narrative and an Impact Score (-100 to +100). Provide a single insight summarizing the comparison.`;
-            const userQuery = `My current financial decision is: "${decision}". Analyze this and project two alternate futures (Scenario A: Immediate Action, Scenario B: EchoFund Nudge).`;
+            const systemPrompt = `You are FinReflect, an expert behavioral finance AI. Analyze the user's financial decision and provide two distinct alternate futures (scenarios A and B). Scenario A reflects the immediate decision outcome. Scenario B reflects a financially wiser alternative. Each scenario must include a detailed narrative and an Impact Score (-100 to +100). Provide a single insight summarizing the comparison.`;
+            const userQuery = `My current financial decision is: "${decision}". Analyze this and project two alternate futures (Scenario A: Immediate Action, Scenario B: FinReflect Nudge).`;
             const responseSchema = {
                 type: "OBJECT",
                 properties: {
@@ -541,7 +649,7 @@
                 document.getElementById('commit-b-text').textContent = analysis.scenarioB.title;
                 document.getElementById('ai-insight').textContent = analysis.insight;
                 document.getElementById('results-section').classList.remove('hidden');
-                showMessage('info', '✨ EchoFund has projected your alternate futures!');
+                showMessage('info', '✨ FinReflect has projected your alternate futures!');
             } catch (error) {
                 console.error("Analysis Error:", error);
                 showMessage('error', `Analysis failed: ${error.message}`);
@@ -564,6 +672,33 @@
             }
             document.getElementById('decision-input').value = '';
             document.getElementById('results-section').classList.add('hidden');
+             /*if (!currentScenarios || (!currentScenarios.scenarioA && !currentScenarios.scenarioB)) {
+                showMessage('error', 'Please run a projection before committing a choice.');
+                return;
+            }
+
+            let scoreEarned = 0;
+            let choiceText = "";
+            let impactScore = 0;
+
+            if (choice === 'A') {
+                impactScore = currentScenarios.scenarioA.impactScore;
+                choiceText = currentScenarios.scenarioA.title;
+            } else {
+                impactScore = currentScenarios.scenarioB.impactScore;
+                choiceText = currentScenarios.scenarioB.title;
+            }
+
+            // Gamification Logic: Score earned is 1 point for every 5 points of Impact Score
+            scoreEarned = Math.max(0, Math.floor(impactScore / 5));
+
+            // Pass the earned score AND the choice text to the updateScore function
+            // updateScore is now responsible for saving and all success/info messaging.
+            updateScore(scoreEarned, choiceText);
+
+            // Reset UI for next decision
+            document.getElementById('decision-input').value = '';
+            document.getElementById('results-section').classList.add('hidden');*/
         }
 
         window.switchTab = function(tabName, buttonElement) {
@@ -578,29 +713,32 @@
 
         window.addTransaction = async function() {
             const description = document.getElementById('txn-description').value.trim();
-            const amount = parseFloat(document.getElementById('txn-amount').value);
+            const amountInput = document.getElementById('txn-amount').value.trim();
             const emotion = document.getElementById('txn-emotion').value.trim();
-            if (!description || !amount || amount <= 0) {
-                showMessage('error', 'Please fill in description and amount!');
+            
+            const amount = parseFloat(amountInput);
+            
+            if (!description || isNaN(amount) || amount <= 0) {
+                showMessage('error', 'Please fill in a description and a valid positive amount!');
                 return;
             }
+
             try {
-                const response = await fetch(`${BACKEND_URL}/api/transactions/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ description, amount, emotional_context: emotion || null })
-                });
-                if (!response.ok) throw new Error('Failed to add transaction');
-                const data = await response.json();
-                showMessage('success', 'Transaction added successfully!');
+                // Use the Firestore function directly
+                await recordManualTransaction(description, amount, emotion);
+                
+                showMessage('success', `Manual transaction for $${amount.toFixed(2)} added successfully!`);
+                
+                // Clear inputs
                 document.getElementById('txn-description').value = '';
                 document.getElementById('txn-amount').value = '';
                 document.getElementById('txn-emotion').value = '';
-                loadTransactions();
-                loadBehavioralProfile();
+                
+                // onSnapshot listener handles automatic UI update, no need for manual load
+
             } catch (error) {
-                console.error("Error:", error);
-                showMessage('error', 'Failed to add transaction. Is the backend running?');
+                console.error("Error adding manual transaction:", error);
+                showMessage('error', `Failed to add transaction: ${error.message}`);
             }
         }
 
@@ -623,7 +761,7 @@
                     </div>
                 `).join('');
             } catch (error) {
-                document.getElementById('transactions-list').innerHTML = '<p class="text-red-500 text-center py-8">Error loading transactions. Is the backend running?</p>';
+                document.getElementById('transactions-list').innerHTML = '';
             }
         }
 
@@ -655,7 +793,7 @@
                 `;
                 }).join('');
             } catch (error) {
-                document.getElementById('behavioral-profile').innerHTML = '<p class="text-red-500 text-center py-8">Error loading profile. Is the backend running?</p>';
+                document.getElementById('behavioral-profile').innerHTML = '';
             }
         }
 
@@ -737,7 +875,7 @@
             initFirebase();
             loadTransactions();
         };
+    document.addEventListener('DOMContentLoaded', initFirebase);
     </script>
 </body>
 </html>
-
